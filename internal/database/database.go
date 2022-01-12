@@ -2,11 +2,12 @@ package database
 
 import (
 	"context"
+	"time"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 // Use to connect to mongodb instance

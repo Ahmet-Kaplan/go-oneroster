@@ -38,7 +38,7 @@ Pre-build binaries for windows and linux x64 are available in
 the releases section as well as a pre-built docker image is 
 available:
 
-`docker pull docker.pkg.github.com/fffnite/go-oneroster/goors:0.3.1`
+`docker pull docker.pkg.usulroster/usulroster:0.3.1`
 
 ## Setup
 
@@ -47,7 +47,7 @@ Start up the api server with either envs or flags
 ### flags
 
 ```
-goors \
+usulroster \
     -k "mySecretKey" \
     -a "HS256" \
     -m "mongodb://myinstance.domain.com:27017" \
@@ -57,10 +57,10 @@ goors \
 ### envs
 
 ```
-GOORS_AUTH_KEY='mySecretKey'
-GOORS_AUTH_KEY_ALG='HS256'
-GOORS_MONGO_URI='mongodb://myinstance.domain.com:27017'
-GOORS_PORT='443'
+USULROSTER_AUTH_KEY='mySecretKey'
+USULROSTER_AUTH_KEY_ALG='HS256'
+USULROSTER_MONGO_URI='mongodb://myinstance.domain.com:27017'
+USULROSTER_PORT='443'
 ```
 
 ### Upload Data

@@ -2,16 +2,18 @@ package handlers
 
 import (
 	"context"
-	"github.com/fffnite/go-oneroster/internal/helpers"
+	"net/http"
+	"strconv"
+	"time"
+	"usulroster/internal/helpers"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"net/http"
-	"strconv"
-	"time"
 )
 
 type Nested struct {
@@ -68,7 +70,7 @@ func GetDoc(
 ) (bson.M, []error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	filter := bson.D{{"sourcedId", chi.URLParam(r, "id")}}
+	filter := bson.D{primitive.E{Key: "sourcedId", Value: chi.URLParam(r, "id")}}
 	options, errP := helpers.GetOption(r.URL.Query(), pf)
 	cur := c.FindOne(
 		ctx,
@@ -93,13 +95,13 @@ func PutDoc(c *mongo.Collection, data interface{},
 		render.JSON(w, r, err)
 		return
 	}
-	filter := bson.D{{"sourcedId", chi.URLParam(r, "id")}}
+	filter := bson.D{primitive.E{Key: "sourcedId", Value: chi.URLParam(r, "id")}}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	res, err := c.UpdateOne(
 		ctx,
 		filter,
-		bson.D{{"$set", data}},
+		bson.D{primitive.E{Key: "$set", Value: data}},
 		options.Update().SetUpsert(true),
 	)
 	if err != nil {
@@ -122,8 +124,8 @@ func PutNestedDoc(
 		return
 	}
 	filter := bson.D{
-		{"sourcedId", chi.URLParam(r, "id")},
-		{obj + "." + field, chi.URLParam(r, "subId")},
+		primitive.E{Key: "sourcedId", Value: chi.URLParam(r, "id")},
+		primitive.E{Key: obj + "." + field, Value: chi.URLParam(r, "subId")},
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -136,7 +138,7 @@ func PutNestedDoc(
 		res, err := c.UpdateOne(
 			ctx,
 			filter,
-			bson.D{{"$set", bson.D{{obj + ".$", &data}}}},
+			bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: obj + ".$", Value: &data}}}},
 		)
 		if err != nil {
 			// TODO: return 500?
@@ -149,8 +151,8 @@ func PutNestedDoc(
 	// insert
 	res, err := c.UpdateOne(
 		ctx,
-		bson.D{{"sourcedId", chi.URLParam(r, "id")}},
-		bson.D{{"$addToSet", bson.D{{obj, &data}}}},
+		bson.D{primitive.E{Key: "sourcedId", Value: chi.URLParam(r, "id")}},
+		bson.D{primitive.E{Key: "$addToSet", Value: bson.D{primitive.E{Key: obj, Value: &data}}}},
 	)
 	if err != nil {
 		log.Info(err)

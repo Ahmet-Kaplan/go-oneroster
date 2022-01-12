@@ -1,12 +1,15 @@
 package main
 
 import (
-	"github.com/fffnite/go-oneroster/internal/conf"
-	"github.com/fffnite/go-oneroster/internal/database"
-	"github.com/fffnite/go-oneroster/internal/routes"
+	"net/http"
+
+	"usulroster/internal/conf"
+	"usulroster/internal/database"
+	"usulroster/internal/routes"
+	"usulroster/internal/usulclient"
+
 	"github.com/go-chi/chi"
 	"github.com/spf13/viper"
-	"net/http"
 )
 
 var (
@@ -27,6 +30,7 @@ func main() {
 
 	// Create DB connection and execute
 	db := database.ConnectDb()
+	usulclient.CreateClient()
 
 	// Creates a users endpoint that can have different methods attached to it
 	r.Route("/ims/oneroster/v1p1", func(r chi.Router) {

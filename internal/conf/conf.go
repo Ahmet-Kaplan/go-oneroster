@@ -1,14 +1,15 @@
 package conf
 
 import (
+	"os"
+
 	log "github.com/sirupsen/logrus"
 	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"os"
 )
 
 func init() {
-	viper.SetEnvPrefix("goors")
+	viper.SetEnvPrefix("USULROSTER")
 
 	flag.StringP(
 		"auth-key",
@@ -51,12 +52,12 @@ func LoadEnvs() {
 	flag.Parse()
 
 	if viper.GetString("mongo_uri") == "" {
-		log.Error("No mongo uri set: goors -m")
+		log.Error("No mongo uri set: usulroster -m")
 		os.Exit(2)
 	}
 
 	if viper.GetString("auth_key") == "" {
-		log.Error("No oauth2 key set: goors -k")
+		log.Error("No oauth2 key set: usulroster -k")
 		os.Exit(2)
 	}
 }

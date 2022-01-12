@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	auth "github.com/fffnite/go-oneroster/internal/auth"
+	"net/http"
+	"usulroster/internal/auth"
+
 	"github.com/go-chi/render"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 func Login() http.HandlerFunc {

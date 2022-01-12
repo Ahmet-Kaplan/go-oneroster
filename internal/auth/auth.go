@@ -5,15 +5,17 @@ package auth
 
 import (
 	"context"
-	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/fffnite/go-oneroster/internal/database"
+	"time"
+	"usulroster/internal/database"
+
 	"github.com/go-chi/jwtauth"
+	jwt "github.com/golang-jwt/jwt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 func Login(u, p string) (string, error) {
@@ -44,7 +46,7 @@ func getSecret(id string, c *mongo.Collection) (string, error) {
 	defer cancel()
 	cur := c.FindOne(
 		ctx,
-		bson.D{{"clientId", id}},
+		bson.D{primitive.E{Key: "clientId", Value: id}},
 	)
 	var s creds
 	cur.Decode(&s)

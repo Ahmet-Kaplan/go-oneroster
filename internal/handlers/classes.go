@@ -1,12 +1,13 @@
 package handlers
 
 import (
-	"github.com/fffnite/go-oneroster/ormodel"
+	"net/http"
+	"time"
+	"usulroster/ormodel"
+
 	"github.com/go-chi/render"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"net/http"
-	"time"
 )
 
 var classesCols = []string{
