@@ -1,4 +1,9 @@
 version: "3.7"
+
+networks:
+  default:
+      name: webproxy
+
 services:
     api:
         build: 
@@ -8,7 +13,8 @@ services:
         env_file:
           - .env
         ports:
-         - 80:80
+         - 9543:80
+	restart: always
         depends_on:
           - database
         labels:
@@ -18,6 +24,7 @@ services:
           #- "traefik.http.routers.api.rule=Host(`api.pleasedwork.local`)" #Host("or.localhost")
     database:
         image: mongo
+	restart: always
         volumes:
             # Set database directory to non temp folder
             - mongodata:/data/db
@@ -35,3 +42,7 @@ services:
         #  - ./traefik/traefik.toml:/etc/traefik/traefik.toml
             # Add your ssl ,crt and .key files to ./traefik/cert
         #  - ./traefik/cert:/cert
+
+volumes:
+  mongodata:
+

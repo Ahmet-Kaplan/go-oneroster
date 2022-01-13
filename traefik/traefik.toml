@@ -5,8 +5,8 @@
 
 [entryPoints]
     [entryPoints.web]
-        address = ":443"
+        address = ":9543"
 
 [tls.stores.default.defaultCertificate]
-    certFile = "/cert/cert.crt"
-    keyFile = "/cert/cert.key"
+    certFile = "/etc/letsencrypt/live/api.usul.academy/fullchain.pem"
+    keyFile = "/etc/letsencrypt/live/api.usul.academy/privkey.pem"
