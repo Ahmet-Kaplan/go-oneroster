@@ -17,6 +17,9 @@ func Routes(db2 *mongo.Client) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Post("/login", handlers.Login())
+	r.Post("/clientcreate", handlers.ClientCreate())
+	r.Get("/clients", handlers.ClientList())
+	r.Put("/clientremove", handlers.RemoveClient())
 	r.Get("/", handlers.HelloWorld)
 	r.Group(func(r chi.Router) {
 		r.Use(jwtauth.Verifier(tokenAuth))

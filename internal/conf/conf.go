@@ -14,7 +14,7 @@ func init() {
 	flag.StringP(
 		"auth-key",
 		"k",
-		"",
+		"mySecretKey",
 		"Secret key for oauth2 JWT encoding (required)",
 	)
 	viper.BindPFlag("auth_key", flag.Lookup("auth-key"))
@@ -32,7 +32,7 @@ func init() {
 	flag.StringP(
 		"mongo-uri",
 		"m",
-		"mongodb://localhost:27017",
+		"mongodb://database:27017",
 		"MongoDB connection URI (required)",
 	)
 	viper.BindPFlag("mongo_uri", flag.Lookup("mongo-uri"))
@@ -48,32 +48,13 @@ func init() {
 	viper.BindEnv("port")
 
 	flag.StringP(
-		"list",
-		"l",
-		"",
-		"list existing credentials based on description",
+		"clientsecretkey",
+		"c",
+		"ChangeMe",
+		"Create or Modify Clients if you entered the secret key",
 	)
-	viper.BindPFlag("list_credentials", flag.Lookup("list_credentials"))
-	viper.BindEnv("list_credentials")
-
-	flag.StringP(
-		"new",
-		"n",
-		"",
-		"generate new credentials with human readable description",
-	)
-	viper.BindPFlag("new_credential", flag.Lookup("new_credential"))
-	viper.BindEnv("new_credential")
-
-	flag.StringP(
-		"remove",
-		"r",
-		"",
-		"Remove credentials by id",
-	)
-	viper.BindPFlag("remove_credential", flag.Lookup("remove_credential"))
-	viper.BindEnv("remove_credential")
-
+	viper.BindPFlag("clientsecretkey", flag.Lookup("clientsecretkey"))
+	viper.BindEnv("clientsecretkey")
 }
 
 func LoadEnvs() {

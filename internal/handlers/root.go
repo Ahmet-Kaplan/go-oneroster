@@ -5,5 +5,5 @@ import (
 )
 
 func HelloWorld(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("https://usulroster"))
+	w.Write([]byte("https://pleased.work"))
 }

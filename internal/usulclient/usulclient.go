@@ -9,22 +9,25 @@ import (
 	"time"
 
 	"usulroster/internal/auth"
+	"usulroster/internal/database"
 
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func create(desc string, c *mongo.Collection) {
+func CreateNewClient(desc string) (string, error) {
+
+	client := database.ConnectDb()
+	c := client.Database("credentials").Collection("clients")
 
 	p, err := randomHex(32)
 	if err != nil {
 		log.Error(err)
-		return
+		return "", err
 	}
 	cred := auth.Creds{
 		ClientId:     uuid.New().String(),
@@ -33,10 +36,8 @@ func create(desc string, c *mongo.Collection) {
 	}
 	b, err := json.Marshal(cred)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return "", err
 	}
-	fmt.Println(string(b))
 	en := encrypt(p)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -48,8 +49,9 @@ func create(desc string, c *mongo.Collection) {
 	)
 	if err != nil {
 		log.Error(err)
+		return "", err
 	}
-	return
+	return string(b), nil
 }
 
 func encrypt(s string) []byte {
@@ -72,7 +74,10 @@ func randomHex(n int) (string, error) {
 	return hex.EncodeToString(bytes), nil
 }
 
-func list(client_desc string, c *mongo.Collection) {
+func ListClients(client_desc string) (string, error) {
+	client := database.ConnectDb()
+	c := client.Database("credentials").Collection("clients")
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	filter := bson.D{}
@@ -86,7 +91,7 @@ func list(client_desc string, c *mongo.Collection) {
 	)
 	if err != nil {
 		log.Error(err)
-		return
+		return "", err
 	}
 	var creds []auth.Creds
 	for cur.Next(ctx) {
@@ -99,13 +104,15 @@ func list(client_desc string, c *mongo.Collection) {
 	}
 	b, err := json.Marshal(creds)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return "", err
 	}
-	fmt.Println(string(b))
+	return string(b), nil
 }
 
-func remove(clientId string, c *mongo.Collection) {
+func RemoveClient(clientId string) (string, error) {
+	client := database.ConnectDb()
+	c := client.Database("credentials").Collection("clients")
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	res, err := c.DeleteOne(
@@ -114,6 +121,7 @@ func remove(clientId string, c *mongo.Collection) {
 	)
 	if err != nil {
 		log.Error(err)
+		return "", err
 	}
-	log.Info(res)
+	return "Deleted count : " + fmt.Sprint(res.DeletedCount), nil
 }
