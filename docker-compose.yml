@@ -14,7 +14,8 @@ services:
           - .env
         ports:
          - 9543:80
-	restart: always
+        
+        restart: always
         depends_on:
           - database
         labels:
@@ -24,7 +25,7 @@ services:
           #- "traefik.http.routers.api.rule=Host(`api.pleasedwork.local`)" #Host("or.localhost")
     database:
         image: mongo
-	restart: always
+        restart: always
         volumes:
             # Set database directory to non temp folder
             - mongodata:/data/db
