@@ -46,6 +46,34 @@ func init() {
 	)
 	viper.BindPFlag("port", flag.Lookup("port"))
 	viper.BindEnv("port")
+
+	flag.StringP(
+		"list",
+		"l",
+		"",
+		"list existing credentials based on description",
+	)
+	viper.BindPFlag("list_credentials", flag.Lookup("list_credentials"))
+	viper.BindEnv("list_credentials")
+
+	flag.StringP(
+		"new",
+		"n",
+		"",
+		"generate new credentials with human readable description",
+	)
+	viper.BindPFlag("new_credential", flag.Lookup("new_credential"))
+	viper.BindEnv("new_credential")
+
+	flag.StringP(
+		"remove",
+		"r",
+		"",
+		"Remove credentials by id",
+	)
+	viper.BindPFlag("remove_credential", flag.Lookup("remove_credential"))
+	viper.BindEnv("remove_credential")
+
 }
 
 func LoadEnvs() {

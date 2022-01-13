@@ -37,8 +37,10 @@ func Login(u, p string) (string, error) {
 	return t, nil
 }
 
-type creds struct {
-	ClientSecret string
+type Creds struct {
+	ClientId     string `json:"clientId"`
+	ClientSecret string `json:"clientSecret,omitempty"`
+	Description  string `json:"description"`
 }
 
 func getSecret(id string, c *mongo.Collection) (string, error) {
@@ -48,7 +50,7 @@ func getSecret(id string, c *mongo.Collection) (string, error) {
 		ctx,
 		bson.D{primitive.E{Key: "clientId", Value: id}},
 	)
-	var s creds
+	var s Creds
 	cur.Decode(&s)
 	return s.ClientSecret, nil
 }
